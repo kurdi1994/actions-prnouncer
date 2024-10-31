@@ -40,3 +40,46 @@ runs:
     GITHUB_IGNORED_LABELS: ${{ inputs.github-ignored-labels }}
     GOOGLE_WEBHOOK_URL: ${{ inputs.google-webhook-url }}
     SHOW_PR_AGE: ${{ inputs.show-pr-age }}
+name: "Notify Google Chats about PR's"
+description: "Periodically scan repositories for any un-reviewed PR's and create a Google Chat message with them."
+
+inputs:
+  google-webhook-url:
+    description: "Google Chat incoming webhook URL to post messages to"
+    required: true
+  github-repositories:
+    description: "Comma-delimited list of repository owners (e.g., guardian/dotcom-rendering)"
+    required: true
+    default: ${{ github.repository }}
+  github-token:
+    description: "GitHub token used to authenticate to GitHub API"
+    required: true
+    default: ${{ github.token }}
+  github-ignored-users:
+    description: "Comma-delimited list of user IDs to ignore"
+    required: true
+    default: "49699333"
+  github-announced-users:
+    description: "Comma-delimited list of user IDs to announce"
+    required: false
+    default: ""
+  github-ignored-labels:
+    description: "Comma-delimited list of label names to ignore"
+    required: true
+    default: "Stale"
+  show-pr-age:
+    description: "Include PR age in chat message output"
+    required: false
+    default: "false"
+
+runs:
+  using: "docker"
+  image: "docker://ghcr.io/guardian/actions-prnouncer"
+  env:
+    GITHUB_REPOSITORIES: ${{ inputs.github-repositories }}
+    GITHUB_TOKEN: ${{ inputs.github-token }}
+    GITHUB_IGNORED_USERS: ${{ inputs.github-ignored-users }}
+    GITHUB_ANNOUNCED_USERS: ${{ inputs.github-announced-users }}
+    GITHUB_IGNORED_LABELS: ${{ inputs.github-ignored-labels }}
+    GOOGLE_WEBHOOK_URL: ${{ inputs.google-webhook-url }}
+    SHOW_PR_AGE: ${{ inputs.show-pr-age }}
