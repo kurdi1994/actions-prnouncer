@@ -15,3 +15,44 @@ simple_logger = "2.1.0"
 anyhow = "1.0.53"
 chrono = { version = "0.4.19", features = ["serde"] }
 url = "2.5.0"
+use reqwest::Client;
+use serde_json::Value;
+use tokio;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Erstellen des HTTP-Clients
+    let client = Client::new();
+
+    // Senden einer GET-Anfrage
+    let response = client.get("https://api.example.com/data")
+        .send()
+        .await?;
+
+    // Verarbeiten der Antwort
+    let json: Value = response.json().await?;
+    println!("{:#?}", json);
+
+    Ok(())
+}
+// Importiert erforderliche Pakete
+use reqwest::Client;
+use serde_json::Value;
+use tokio;
+
+// Hauptfunktion, die eine asynchrone GET-Anfrage sendet
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Erstellen des HTTP-Clients
+    let client = Client::new();
+
+    // Senden der GET-Anfrage an eine Beispiel-API
+    let response = client.get("https://api.example.com/data")
+        .send()
+        .await?;
+
+    // Verarbeitet die Antwort und gibt sie als JSON aus
+    let json: Value = response.json().await?;
+    println!("{:#?}", json);
+
+    Ok(())
